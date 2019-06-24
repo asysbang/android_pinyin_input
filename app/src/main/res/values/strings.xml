@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Input</string>
+    <string name="word_separators" translatable="false">\u0020.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
+</resources>

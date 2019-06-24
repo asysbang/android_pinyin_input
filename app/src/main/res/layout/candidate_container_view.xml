@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.asysbang.input.ui.CandidateContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/new_candidate_container_bg"
+    android:orientation="horizontal">
+
+    <RelativeLayout android:id="@+id/candidate_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <Button android:layout_centerVertical="true"
+            android:id="@+id/more_input_method"
+            android:layout_marginLeft="30dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ad_style_noti_white_detail" />
+
+        <TextView android:layout_centerInParent="true"
+            android:id="@+id/candidate_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ff00ff00"
+            android:textSize="30sp"
+            android:text="ABCDEF" />
+
+
+    </RelativeLayout>
+
+
+    <com.asysbang.input.ui.CandidateView
+        android:id="@+id/candidate_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
+</com.asysbang.input.ui.CandidateContainerView>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.asysbang.input.ui.KeyBoardContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/keyboard_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+<include layout="@layout/more_input_method"></include>
+
+
+    </RelativeLayout>
+
+
+    <com.asysbang.input.ui.MyKeyBoardView
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keyBackground="@drawable/key_func_qwerty_p"
+        android:keyPreviewLayout="@layout/input_key_preview"
+        android:keyTextSize="30sp"
+        android:padding="20dip" />
+
+
+</com.asysbang.input.ui.KeyBoardContainerView>
