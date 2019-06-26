@@ -1,5 +1,6 @@
 package com.asysbang.input.service;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.IBinder;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.asysbang.input.R;
+import com.asysbang.input.tess.TessHelper;
 import com.asysbang.input.ui.CandidateContainerView;
 import com.asysbang.input.ui.CandidateView;
 import com.asysbang.input.ui.KeyBoardContainerView;
@@ -32,9 +35,12 @@ import com.asysbang.input.ui.MyKeyBoardView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputCoreService extends InputMethodService implements KeyboardView.OnKeyboardActionListener,InputCoreServiceInterface{
+public class InputCoreService extends InputMethodService implements KeyboardView.OnKeyboardActionListener, InputCoreServiceInterface {
 
-    private InputMethodManager mInputMethodManager;
+
+    private boolean isCandidateShowing = false;
+
+    private InputMethodManager mInputMethodManager  ;
     private String mWordSeparators;
 
 
@@ -59,6 +65,18 @@ public class InputCoreService extends InputMethodService implements KeyboardView
 
     public static final String ACTION_SHOW_PICKER = "com.asysbang.input.show_picker";
 
+    private TessHelper mTessHelper;
+
+    private void requestPermissions() {
+//        getApplicationContext().requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},  99);
+        Intent intent = new Intent("android.content.pm.action.REQUEST_PERMISSIONS");
+        intent.putExtra("android.content.pm.extra.REQUEST_PERMISSIONS_NAMES", new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE});
+        intent.setPackage(getPackageName());
+
+
+    }
+
+
 
 
     @Override
@@ -66,6 +84,16 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         super.onCreate();
         mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         mWordSeparators = getResources().getString(R.string.word_separators);
+        isCandidateShowing = false;
+        mTessHelper = TessHelper.getInstance();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("","======init thread");
+                mTessHelper.init();
+            }
+        }).start();
+
     }
 
 
@@ -75,13 +103,12 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         mQwertyKeyboard = new MyKeyBoard(this, R.xml.qwerty);
         mSymbolsKeyboard = new MyKeyBoard(this, R.xml.symbols);
         mSymbolsShiftedKeyboard = new MyKeyBoard(this, R.xml.symbols_shift);
-        //默认弹出 candidate view  ，无数据时显示settings view
-        setCandidatesViewShown(true);
+
     }
 
     @Override
     public View onCreateInputView() {
-        mKeyBoardContainerView = (KeyBoardContainerView) getLayoutInflater().inflate(R.layout.keyboard_container_view,null);
+        mKeyBoardContainerView = (KeyBoardContainerView) getLayoutInflater().inflate(R.layout.keyboard_container_view, null);
         mKeyBoardContainerView.init();
         mInputView = mKeyBoardContainerView.findViewById(R.id.keyboard);
         mInputView.setOnKeyboardActionListener(this);
@@ -91,17 +118,24 @@ public class InputCoreService extends InputMethodService implements KeyboardView
 
     @Override
     public View onCreateCandidatesView() {
-        mCandidateContainerView= (CandidateContainerView) LayoutInflater.from(getApplicationContext()).inflate(R.layout.candidate_container_view, null);
+        mCandidateContainerView = (CandidateContainerView) LayoutInflater.from(getApplicationContext()).inflate(R.layout.candidate_container_view, null);
         mCandidateContainerView.init();
         mCandidateContainerView.setInputCoreService(this);
         return mCandidateContainerView;
     }
 
+
+    /**
+     * 第一次进入activity时 ，键盘没有弹出会触发这个函数
+     * 键盘弹出会触发{@link #onStartInputView}
+     *
+     * @param attribute
+     * @param restarting
+     */
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
         mComposing.setLength(0);
-        updateCandidates();
         mCompletionOn = false;
         mCompletions = null;
         Log.i("=====", "===========onStartInput==");
@@ -120,6 +154,8 @@ public class InputCoreService extends InputMethodService implements KeyboardView
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
         Log.i("=====", "===========onStartInputView==");
+        //默认弹出 candidate view  ，无数据时显示settings view
+        setCandidatesViewShown(true);
     }
 
     @Override
@@ -135,10 +171,20 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         Log.i("=====", "===========onCurrentInputMethodSubtypeChanged==");
     }
 
+
+    /**
+     * @param oldSelStart
+     * @param oldSelEnd
+     * @param newSelStart
+     * @param newSelEnd
+     * @param candidatesStart
+     * @param candidatesEnd   每当按下空格 都会得到 candidatesEnd = -1  作为判断界面修改的标志
+     *                        切换“更多设置” 和 “Candidate界面”的判断依据
+     */
     @Override
     public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-        Log.i("=====", "===========onUpdateSelection==");
+        Log.i("=====", "===========onUpdateSelection=={oldSelStart = " + oldSelStart + " , oldSelEnd = " + oldSelEnd + " , newSelStart = " + newSelStart + " , newSelEnd= " + newSelEnd + ", candidatesStart = " + candidatesStart + ", candidatesEnd = " + candidatesEnd);
         // If the current selection in the text view changes, we should
         // clear whatever candidate text we have.
         if (mComposing.length() > 0 && (newSelStart != candidatesEnd
@@ -150,6 +196,7 @@ public class InputCoreService extends InputMethodService implements KeyboardView
                 ic.finishComposingText();
             }
         }
+
     }
 
 
@@ -186,6 +233,7 @@ public class InputCoreService extends InputMethodService implements KeyboardView
     @Override
     public void onRelease(int primaryCode) {
         Log.i("=====", "===========onRelease==");
+
     }
 
     @Override
@@ -238,10 +286,12 @@ public class InputCoreService extends InputMethodService implements KeyboardView
             if (mComposing.length() > 0) {
                 ArrayList<String> list = new ArrayList<String>();
                 list.add(mComposing.toString());
-                list.add(mComposing.toString()+"11");
-                list.add(mComposing.toString()+"22");
+                list.add(mComposing.toString() + "11");
+                list.add(mComposing.toString() + "22");
+                Log.e("", "==========updateCandidates 11111");
                 setSuggestions(list, true, true);
             } else {
+                Log.e("", "==========updateCandidates 2222");
                 setSuggestions(null, false, false);
             }
         }
@@ -351,6 +401,7 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         String separators = getWordSeparators();
         return separators.contains(String.valueOf((char) code));
     }
+
     /**
      * Helper to determine if a given character code is alphabetic.
      */
@@ -407,9 +458,9 @@ public class InputCoreService extends InputMethodService implements KeyboardView
             updateCandidates();
         } else {
             keyDownUp(KeyEvent.KEYCODE_DEL);
+            updateCandidates();
         }
     }
-
 
 
     private void sendKey(int keyCode) {
@@ -439,7 +490,7 @@ public class InputCoreService extends InputMethodService implements KeyboardView
 
     @Override
     public void switchMoreInputMethodView() {
-        Log.e("","==================service switchMoreInputMethodView");
+        Log.e("", "==================service switchMoreInputMethodView");
         mKeyBoardContainerView.switchMoreInputMethodView();
     }
 

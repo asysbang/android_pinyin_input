@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="#ff00ff00"
             android:textSize="30sp"
-            android:text="ABCDEF" />
+            android:text="Android Input Method" />
 
 
     </RelativeLayout>

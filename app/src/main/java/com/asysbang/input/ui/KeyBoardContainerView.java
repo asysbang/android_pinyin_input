@@ -20,6 +20,8 @@ public class KeyBoardContainerView extends LinearLayout {
 
     private MyKeyBoardView mMyKeyBoardView;
 
+    private HandWriteView mHandWriteView;
+
     private boolean isMoreInputMethodViewShowing = false;
 
     private MoreInputMethodPopupWindow mMoreInputMethodPopupWindow;
@@ -38,8 +40,8 @@ public class KeyBoardContainerView extends LinearLayout {
         mMoreInputMethodView = findViewById(R.id.keyboard_container);
         mMyKeyBoardView = findViewById(R.id.keyboard);
         mMoreInputMethodPopupWindow = new MoreInputMethodPopupWindow(getContext());
-
-
+        mHandWriteView = findViewById(R.id.hw_view);
+        mHandWriteView.init();
     }
 
 
@@ -67,6 +69,21 @@ public class KeyBoardContainerView extends LinearLayout {
 
     public void switchMoreInputMethodView() {
         Log.e("","==================KeyBoardContainerView switchMoreInputMethodView");
+        boolean debugHwView = true;
+        if (debugHwView) {
+            if (isMoreInputMethodViewShowing) {
+                mHandWriteView.setVisibility(View.GONE);
+                mMyKeyBoardView.setVisibility(View.VISIBLE);
+                isMoreInputMethodViewShowing = false;
+            } else {
+                mHandWriteView.setVisibility(View.VISIBLE);
+                mHandWriteView.clear();
+                mMyKeyBoardView.setVisibility(View.GONE);
+                isMoreInputMethodViewShowing = true;
+            }
+            return;
+        }
+        mHandWriteView.setVisibility(View.GONE);
 
         if (isMoreInputMethodViewShowing) {
             mMoreInputMethodView.setVisibility(View.GONE);
@@ -79,6 +96,7 @@ public class KeyBoardContainerView extends LinearLayout {
             isMoreInputMethodViewShowing = true;
             Log.e("","==============22222=");
         }
+
     }
 
 

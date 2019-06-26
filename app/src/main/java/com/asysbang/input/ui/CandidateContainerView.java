@@ -29,14 +29,14 @@ public class CandidateContainerView extends LinearLayout implements View.OnClick
 
 
     public CandidateContainerView(Context context, AttributeSet attrs) {
-        super(context,attrs);
+        super(context, attrs);
 
     }
 
-    public void init(){
+    public void init() {
         mSettingsContainer = findViewById(R.id.candidate_container);
         mMoreInputMethod = findViewById(R.id.more_input_method);
-        mTextView =findViewById(R.id.candidate_text);
+        mTextView = findViewById(R.id.candidate_text);
         mCandidateView = findViewById(R.id.candidate_view);
         mCandidateView.init();
         mMoreInputMethod.setOnClickListener(this);
@@ -50,20 +50,25 @@ public class CandidateContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        Log.e("","=====================");
+        Log.e("", "=====================");
         mInputCoreService.switchMoreInputMethodView();
 //        mInputCoreService.showMoreInputMethodView(v);
     }
 
     public void setSuggestions(List<String> suggestions, boolean completions, boolean typedWordValid) {
-        mSettingsContainer.setVisibility(View.GONE);
-        mCandidateView.setVisibility(View.VISIBLE);
-        mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
+        Log.e("", "=====================setSuggestions = " + suggestions);
+        if (null == suggestions) {
+            mSettingsContainer.setVisibility(View.VISIBLE);
+            mCandidateView.setVisibility(View.GONE);
+        } else {
+            mSettingsContainer.setVisibility(View.GONE);
+            mCandidateView.setVisibility(View.VISIBLE);
+            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
+        }
+
     }
 
     public void clear() {
         mCandidateView.clear();
-        mSettingsContainer.setVisibility(View.VISIBLE);
-        mCandidateView.setVisibility(View.GONE);
     }
 }

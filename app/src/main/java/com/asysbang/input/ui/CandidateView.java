@@ -60,6 +60,10 @@ public class CandidateView extends View {
     int mColorRecommended = Color.BLUE;
     int mColorOther = Color.GREEN;
 
+    public CandidateView(Context context) {
+        super(context);
+    }
+
     public CandidateView(Context context,  AttributeSet attrs){
         super(context,attrs);
     }
@@ -76,9 +80,8 @@ public class CandidateView extends View {
 
         Resources r = getContext().getResources();
         mVerticalPadding = 10;//r.getDimensionPixelSize(R.dimen.candidate_vertical_padding);
-//        setBackgroundColor(Color.RED);
-
-        setBackgroundResource(R.drawable.candidate_bg);
+        //在container的布局中设置背景图片
+        //setBackgroundResource(R.drawable.new_candidate_container_bg);
         mPaint = new Paint();
         mPaint.setColor(mColorNormal);
         mPaint.setAntiAlias(true);
@@ -110,10 +113,7 @@ public class CandidateView extends View {
         setVerticalScrollBarEnabled(false);
     }
 
-    public CandidateView(Context context) {
-        super(context);
 
-    }
 
 
     @Override

@@ -9,4 +9,8 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    private void requestPermissions() {
+        requestPermissions(new String[]{""},9);
+    }
 }
