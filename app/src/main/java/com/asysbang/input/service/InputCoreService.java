@@ -9,7 +9,9 @@ import android.content.IntentFilter;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,11 +25,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.asysbang.input.R;
 import com.asysbang.input.tess.TessHelper;
 import com.asysbang.input.ui.CandidateContainerView;
 import com.asysbang.input.ui.CandidateView;
+import com.asysbang.input.ui.HandWriteView;
 import com.asysbang.input.ui.KeyBoardContainerView;
 import com.asysbang.input.ui.MyKeyBoard;
 import com.asysbang.input.ui.MyKeyBoardView;
@@ -40,7 +44,8 @@ public class InputCoreService extends InputMethodService implements KeyboardView
 
     private boolean isCandidateShowing = false;
 
-    private InputMethodManager mInputMethodManager  ;
+    private InputMethodManager mInputMethodManager;
+
     private String mWordSeparators;
 
 
@@ -59,8 +64,11 @@ public class InputCoreService extends InputMethodService implements KeyboardView
 
 
     private boolean mCompletionOn = false;
+
     private StringBuilder mComposing = new StringBuilder();
+
     private CompletionInfo[] mCompletions;
+
     private boolean mCapsLock;
 
     public static final String ACTION_SHOW_PICKER = "com.asysbang.input.show_picker";
@@ -70,13 +78,22 @@ public class InputCoreService extends InputMethodService implements KeyboardView
     private void requestPermissions() {
 //        getApplicationContext().requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},  99);
         Intent intent = new Intent("android.content.pm.action.REQUEST_PERMISSIONS");
-        intent.putExtra("android.content.pm.extra.REQUEST_PERMISSIONS_NAMES", new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE});
+        intent.putExtra("android.content.pm.extra.REQUEST_PERMISSIONS_NAMES", new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
         intent.setPackage(getPackageName());
-
-
     }
 
+    private final int MSG_TESS_INIT_FAILE = 1001;
 
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case MSG_TESS_INIT_FAILE:
+                    Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
 
 
     @Override
@@ -89,8 +106,11 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("","======init thread");
-                mTessHelper.init();
+                Log.e("", "======init thread");
+                boolean ok = mTessHelper.init();
+                if (!ok) {
+                    mHandler.obtainMessage(MSG_TESS_INIT_FAILE).sendToTarget();
+                }
             }
         }).start();
 
@@ -153,9 +173,14 @@ public class InputCoreService extends InputMethodService implements KeyboardView
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        Log.i("=====", "===========onStartInputView==");
+        Log.i("=====", "===========onStartInputView==" + info.imeOptions);
+        Log.i("=====", "===========onStartInputView==" + info.inputType);
         //默认弹出 candidate view  ，无数据时显示settings view
+//        setCandidatesView(mCandidateContainerView);
+        setExtractViewShown(true);
         setCandidatesViewShown(true);
+
+
     }
 
     @Override
@@ -492,6 +517,11 @@ public class InputCoreService extends InputMethodService implements KeyboardView
     public void switchMoreInputMethodView() {
         Log.e("", "==================service switchMoreInputMethodView");
         mKeyBoardContainerView.switchMoreInputMethodView();
+    }
+
+    @Override
+    public void showInputView() {
+        mKeyBoardContainerView.switchInputView();
     }
 
     public void showMoreInputMethodView(View anchor) {

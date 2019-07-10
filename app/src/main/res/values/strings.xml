@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Input</string>
     <string name="word_separators" translatable="false">\u0020.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
+    <string name="more_input_method">More Input</string>
+    <string name="show_hw_view">HW View</string>
 </resources>
+

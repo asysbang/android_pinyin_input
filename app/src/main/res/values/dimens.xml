@@ -19,7 +19,7 @@
 -->
 
 <resources>
-    <dimen name="key_height">70dip</dimen>
+    <dimen name="key_height">40dip</dimen>
     <dimen name="horizontal_gap">8sp</dimen>
     <dimen name="vertical_gap">8sp</dimen>
 

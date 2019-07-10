@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Input</string>
+    <string name="more_input_method">更多键盘</string>
+    <string name="show_hw_view">手写键盘</string>
+</resources>

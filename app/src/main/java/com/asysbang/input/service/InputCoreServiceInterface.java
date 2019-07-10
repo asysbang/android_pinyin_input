@@ -4,4 +4,7 @@ public interface InputCoreServiceInterface {
 
 
     public void switchMoreInputMethodView();
+
+    public void showInputView();
+
 }

@@ -20,9 +20,14 @@ public class TessHelper {
 
 
 
-    public void init() {
+    public boolean init() {
         mApi = new TessBaseAPI();
-        mApi.init("/sdcard/tess","chi_sim");
+        try{
+            mApi.init("/sdcard/tess","chi_sim");
+        }catch (Exception e){
+            return false;
+        }
+
         Log.e("","=====init");
         // just demo
 //        Bitmap bitmap = BitmapFactory.decodeFile("");
@@ -31,6 +36,7 @@ public class TessHelper {
         // === over demo
 
 //        test();
+        return true;
     }
 
     public String getTextFromBitmap(Bitmap bitmap) {

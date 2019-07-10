@@ -8,13 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.asysbang.input.R;
 
-public class KeyBoardContainerView extends LinearLayout {
+public class KeyBoardContainerView extends FrameLayout {
 
     private RelativeLayout mMoreInputMethodView;
 
@@ -23,6 +24,10 @@ public class KeyBoardContainerView extends LinearLayout {
     private HandWriteView mHandWriteView;
 
     private boolean isMoreInputMethodViewShowing = false;
+
+    private static final int INPUT_TYPE_HANDWRITE = 1;
+
+    private int mCurrentInputType = 0;
 
     private MoreInputMethodPopupWindow mMoreInputMethodPopupWindow;
 
@@ -42,6 +47,19 @@ public class KeyBoardContainerView extends LinearLayout {
         mMoreInputMethodPopupWindow = new MoreInputMethodPopupWindow(getContext());
         mHandWriteView = findViewById(R.id.hw_view);
         mHandWriteView.init();
+    }
+
+    public void switchInputView() {
+        if (mCurrentInputType == 0) {
+            mCurrentInputType = INPUT_TYPE_HANDWRITE;
+            mMyKeyBoardView.setVisibility(View.GONE);
+            mHandWriteView.setVisibility(View.VISIBLE);
+        } else {
+            mCurrentInputType =0;
+            mMyKeyBoardView.setVisibility(View.VISIBLE);
+            mHandWriteView.setVisibility(View.GONE);
+        }
+
     }
 
 

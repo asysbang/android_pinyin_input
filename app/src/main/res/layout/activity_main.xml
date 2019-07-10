@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="just for input test" />
+    <EditText android:imeOptions="flagNoExtractUi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="just for input test" />
+
 
     <Button
         android:id="@+id/show_input_picker"

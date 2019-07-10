@@ -102,7 +102,7 @@ public class HandWriteView extends View {
         // commit the path to our offscreen
         mCanvas.drawPath(mPath, mPaint);
         // kill this so we don't double draw
-        saveBitmap();
+//        saveBitmap();
         String res = TessHelper.getInstance().getTextFromBitmap(mBitmap);
         Log.e("","======="+res);
         mPath.reset();
