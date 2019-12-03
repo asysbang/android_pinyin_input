@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.Keyboard;
 
-import com.asysbang.input.R;
 
 
 public class MyKeyBoard extends Keyboard {
@@ -17,6 +16,8 @@ public class MyKeyBoard extends Keyboard {
                       CharSequence characters, int columns, int horizontalPadding) {
         super(context, layoutTemplateResId, characters, columns, horizontalPadding);
     }
+
+
 
     @Override
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y, XmlResourceParser parser) {
@@ -32,7 +33,7 @@ public class MyKeyBoard extends Keyboard {
 //            mLanguageSwitchKey = key;
 //            mSavedLanguageSwitchKey = new LatinKey(res, parent, x, y, parser);
         }
-        key.iconPreview = res.getDrawable(R.drawable.key_func_qwerty_p);
+        //key.iconPreview = res.getDrawable(R.drawable.key_func_qwerty_p);
         return key;
     }
 

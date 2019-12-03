@@ -2,12 +2,12 @@
 
 
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="10.000002%p"
+    android:keyWidth="9%p"
     android:horizontalGap="@dimen/horizontal_gap"
     android:verticalGap="@dimen/vertical_gap"
     android:keyHeight="@dimen/key_height"
     >
-    <Row >
+    <Row>
         <Key android:codes="113" android:keyLabel="q" android:keyEdgeFlags="left"   />
         <Key android:codes="119" android:keyLabel="w" android:popupCharacters="qwer"   android:popupKeyboard="@layout/activity_test"/>
         <Key android:codes="101" android:keyLabel="e" android:popupCharacters="qwer"   android:popupKeyboard="@layout/activity_test"/>
@@ -20,8 +20,9 @@
         <Key android:codes="112" android:keyLabel="p" android:keyEdgeFlags="right"/>
     </Row>
     
-    <Row >
-        <Key android:codes="97" android:keyLabel="a"   android:keyEdgeFlags="left"/>
+    <Row>
+        <Key android:codes="97" android:keyLabel="a" android:horizontalGap="5%p" 
+                android:keyEdgeFlags="left"/>
         <Key android:codes="115" android:keyLabel="s"/>
         <Key android:codes="100" android:keyLabel="d"/>
         <Key android:codes="102" android:keyLabel="f"/>
@@ -29,7 +30,7 @@
         <Key android:codes="104" android:keyLabel="h"/>
         <Key android:codes="106" android:keyLabel="j"/>
         <Key android:codes="107" android:keyLabel="k"/>
-        <Key android:codes="108" android:keyLabel="l"  android:keyEdgeFlags="right"/>
+        <Key android:codes="108" android:keyLabel="l" android:keyEdgeFlags="right"/>
     </Row>
     
     <Row>

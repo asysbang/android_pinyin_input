@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -143,7 +144,6 @@ public class InputCoreService extends InputMethodService implements KeyboardView
         mCandidateContainerView.setInputCoreService(this);
         return mCandidateContainerView;
     }
-
 
     /**
      * 第一次进入activity时 ，键盘没有弹出会触发这个函数

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 requestPermission();
                 break;
             case R.id.show_input_picker:
+
                 InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 mInputMethodManager.showInputMethodPicker();
                 break;

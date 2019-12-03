@@ -3,6 +3,7 @@ package com.asysbang.input.tess;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.view.View;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -25,6 +26,7 @@ public class TessHelper {
         try{
             mApi.init("/sdcard/tess","chi_sim");
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
 

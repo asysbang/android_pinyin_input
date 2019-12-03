@@ -1,6 +1,8 @@
 package com.asysbang.input.ui;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
@@ -15,6 +17,12 @@ public class MyKeyBoardView extends KeyboardView {
         super(context, attrs, defStyle);
     }
     static final int KEYCODE_OPTIONS = -100;
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.e("","==========onDraw==");
+    }
 
     @Override
     protected boolean onLongPress(Keyboard.Key key) {

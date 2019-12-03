@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.asysbang.input.ui.KeyBoardContainerView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/main_bg"
+    android:padding="10dp">
 
-    <RelativeLayout android:visibility="gone"
+    <RelativeLayout
         android:id="@+id/keyboard_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
         <include layout="@layout/more_input_method"></include>
     </RelativeLayout>
 
@@ -15,17 +18,17 @@
         android:id="@+id/hw_view"
         android:layout_width="match_parent"
         android:layout_height="400dip"
-        android:background="#ff058393"
+        android:background="#ff0000ff"
         android:visibility="gone" />
 
     <com.asysbang.input.ui.MyKeyBoardView
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keyBackground="@drawable/key_func_qwerty_p"
+        android:background="#00000000"
+        android:keyTextColor="#ff00faa0"
+        android:keyBackground="@drawable/keyborad_key"
         android:keyPreviewLayout="@layout/input_key_preview"
-        android:keyTextSize="30sp"
-        android:padding="20dip" />
-
+        android:keyTextSize="20sp" />
 
 </com.asysbang.input.ui.KeyBoardContainerView>
